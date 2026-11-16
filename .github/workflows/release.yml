@@ -48,7 +48,7 @@ jobs:
             CGO_ENABLED=0 GOOS="$GOOS" GOARCH="$GOARCH" go build -trimpath -ldflags "$LDFLAGS" -o "$STAGE/usbrelay${EXT}" ./cmd/usbrelay
             cp README.md LICENSE "$STAGE/"
             if [ "$GOOS" = "windows" ]; then
-              (cd "$STAGE" && zip -q "../usbrelay-${VERSION}-${GOOS}-${GOARCH}.zip" .)
+              (cd "$STAGE" && zip -rq "../usbrelay-${VERSION}-${GOOS}-${GOARCH}.zip" .)
             else
               tar -C "$STAGE" -czf "dist/usbrelay-${VERSION}-${GOOS}-${GOARCH}.tar.gz" .
             fi

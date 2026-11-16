@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run Go tests
+        run: go test -race -timeout 60s ./...
+
+      - name: Build desktop binaries
+        shell: bash
+        run: |
+          mkdir -p dist
+          VERSION="${GITHUB_REF_NAME}"
+          LDFLAGS="-s -w -X main.version=${VERSION}"
+          for target in "darwin/amd64" "darwin/arm64" "linux/amd64" "linux/arm64" "windows/amd64"; do
+            GOOS="${target%/*}"
+            GOARCH="${target#*/}"
+            EXT=""
+            if [ "$GOOS" = "windows" ]; then EXT=".exe"; fi
+            STAGE="dist/stage-${GOOS}-${GOARCH}"
+            mkdir -p "$STAGE"
+            CGO_ENABLED=0 GOOS="$GOOS" GOARCH="$GOARCH" go build -trimpath -ldflags "$LDFLAGS" -o "$STAGE/usbrelay${EXT}" ./cmd/usbrelay
+            cp README.md LICENSE "$STAGE/"
+            if [ "$GOOS" = "windows" ]; then
+              (cd "$STAGE" && zip -q "../usbrelay-${VERSION}-${GOOS}-${GOARCH}.zip" .)
+            else
+              tar -C "$STAGE" -czf "dist/usbrelay-${VERSION}-${GOOS}-${GOARCH}.tar.gz" .
+            fi
+            rm -rf "$STAGE"
+          done
+
+      - name: Build Android APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Prepare Android APK and checksums
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          cp android/app/build/outputs/apk/debug/app-debug.apk "dist/usbrelay-${VERSION}-android.apk"
+          (cd dist && sha256sum * > checksums.txt)
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/* \
+            --title "usbrelay ${GITHUB_REF_NAME}" \
+            --generate-notes

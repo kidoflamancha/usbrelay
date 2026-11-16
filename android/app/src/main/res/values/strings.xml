@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">USB Relay</string>
+
+    <string name="status_idle_title">Off</string>
+    <string name="status_waiting_title">Waiting for computer</string>
+    <string name="status_connected_title">Sharing network to computer</string>
+
+    <string name="status_idle_detail">Tap Start to share this phone\'s network with your computer over USB.</string>
+    <string name="status_connected_detail">Exit: %1$s · Active connections: %2$d</string>
+    <string name="status_no_exit_net">Connected to computer, but %1$s is unavailable.</string>
+
+    <string name="step_usb">Plug in the USB cable with USB debugging enabled</string>
+    <string name="step_computer">Run usbrelay run on your computer</string>
+
+    <string name="action_start">Start</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_net_mode">Exit network: %s (tap to switch)</string>
+
+    <string name="mode_default">Auto (Default)</string>
+    <string name="mode_cellular">Cellular Only (4G/5G)</string>
+
+    <string name="notif_channel">USB Relay</string>
+    <string name="notif_connected">Sharing network · %d active</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">USB Relay</string>
+
+    <string name="status_idle_title">未开启</string>
+    <string name="status_waiting_title">等待电脑连接</string>
+    <string name="status_connected_title">正在给电脑共享网络</string>
+
+    <string name="status_idle_detail">点开始后，电脑可通过 USB 线使用这台手机的网络。</string>
+    <string name="status_connected_detail">出口：%1$s · 当前活跃连接：%2$d</string>
+    <string name="status_no_exit_net">已连接电脑，但「%1$s」当前不可用。</string>
+
+    <string name="step_usb">确保已开启 USB 调试并用 USB 线连接电脑</string>
+    <string name="step_computer">在电脑终端运行 usbrelay run</string>
+
+    <string name="action_start">开始</string>
+    <string name="action_stop">停止</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_net_mode">出口网络：%s（点击切换）</string>
+
+    <string name="mode_default">自动（默认网络）</string>
+    <string name="mode_cellular">强制蜂窝流量（4G/5G）</string>
+
+    <string name="notif_channel">USB Relay</string>
+    <string name="notif_connected">正在共享网络给电脑 · %d 个活跃连接</string>
+</resources>

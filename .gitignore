@@ -1,0 +1,10 @@
+bin/
+*.apk
+*.log
+*.pcap
+android/.gradle/
+android/.kotlin/
+android/build/
+android/app/build/
+android/local.properties
+.DS_Store

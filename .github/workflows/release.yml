@@ -23,8 +23,11 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
+      - name: Accept Android SDK licenses
+        run: |
+          SDKM=$(command -v sdkmanager || echo "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager")
+          if [ -x "$SDKM" ]; then yes | "$SDKM" --licenses >/dev/null 2>&1 || true; fi
 
       - name: Run Go tests
         run: go test -race -timeout 60s ./...
